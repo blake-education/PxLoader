@@ -28,8 +28,9 @@
         }
 
         var entries = [],
-            // holds resources to be loaded with their status
+            self = this,
             progressListeners = [],
+            timer = null,
             timeStarted, progressChanged = Date.now();
 
         /**
@@ -145,7 +146,24 @@
             }
 
             // do an initial status check soon since items may be loaded from the cache
-            setTimeout(statusCheck, 100);
+            timer = setTimeout(statusCheck, 100);
+        };
+
+        this.destroy = function() {
+          for (var i = 0, len = entries.length; i < len; i++) {
+            var entry = entries[i];
+            if (entry.resource.unbind !== undefined) {
+              entry.resource.unbind()
+            };
+            if (entry.resource.removeEventHandlers !== undefined) {
+              entry.resource.removeEventHandlers()
+            };
+            entry.resource.img = null;
+          }
+
+          clearTimeout(timer);
+
+          entries = [];
         };
 
         var statusCheck = function() {
@@ -181,7 +199,7 @@
             }
 
             if (checkAgain) {
-                setTimeout(statusCheck, settings.statusInterval);
+                timer = setTimeout(statusCheck, settings.statusInterval);
             }
         };
 
