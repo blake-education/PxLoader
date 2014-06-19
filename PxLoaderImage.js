@@ -6,6 +6,7 @@ function PxLoaderImage(url, tags, priority) {
         loader = null;
 
     this.img = new Image();
+    this.img.setAttribute('crossorigin', 'anonymous');
     this.tags = tags;
     this.priority = priority;
 
