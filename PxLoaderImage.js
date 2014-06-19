@@ -1,4 +1,4 @@
-/*global PxLoader: true, define: true */ 
+/*global PxLoader: true, define: true */
 
 // PxLoader plugin to load images
 function PxLoaderImage(url, tags, priority) {
@@ -11,22 +11,22 @@ function PxLoaderImage(url, tags, priority) {
 
     var onReadyStateChange = function() {
         if (self.img.readyState === 'complete') {
-            removeEventHandlers();
+            self.removeEventHandlers();
             loader.onLoad(self);
         }
     };
 
     var onLoad = function() {
-        removeEventHandlers();
+        self.removeEventHandlers();
         loader.onLoad(self);
     };
 
     var onError = function() {
-        removeEventHandlers();
+        self.removeEventHandlers();
         loader.onError(self);
     };
 
-    var removeEventHandlers = function() {
+    this.removeEventHandlers = function() {
         self.unbind('load', onLoad);
         self.unbind('readystatechange', onReadyStateChange);
         self.unbind('error', onError);
@@ -50,14 +50,14 @@ function PxLoaderImage(url, tags, priority) {
     // the event listeners are not triggered).
     this.checkStatus = function() {
         if (self.img.complete) {
-            removeEventHandlers();
+            self.removeEventHandlers();
             loader.onLoad(self);
         }
     };
 
     // called by PxLoader when it is no longer waiting
     this.onTimeout = function() {
-        removeEventHandlers();
+        self.removeEventHandlers();
         if (self.img.complete) {
             loader.onLoad(self);
         } else {
